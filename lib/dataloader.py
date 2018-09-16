@@ -80,11 +80,12 @@ def read_data():
 
 # 数据预处理
 def data_filter(pucks):
+    remove_list = []
     # 遍历字典
     for key,value in pucks.items():
         # 删除与20号没有交集的航班
         if '2018-01-20' not in [value['到达日期'], value['出发日期']]:
-            pucks.pop(key)
+            remove_list.append(key)
             continue
 
         # 航班离开时刻加45分钟(总的飞机停留时间段)
@@ -103,9 +104,11 @@ def data_filter(pucks):
 
         # 考虑隔天停留（19到达20号离开、20号到达21号离开）
         if value['到达日期'] == '2018-01-19':
-            value['到达时刻'] == '0000'
+            value['到达时刻'] = '0000'
         elif value['出发日期'] == '2018-01-21':
-            value['出发时刻'] == '2400'
+            value['出发时刻'] = '2400'
+    for k in remove_list:
+        pucks.pop(k)
 
     return pucks
 
@@ -118,3 +121,5 @@ def calcu_pass(tickets):
 
 if __name__ == '__main__':
     P, T, G = read_data()
+    Pucks = data_filter(P)
+    t = calcu_pass(T)
