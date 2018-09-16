@@ -98,6 +98,78 @@ def calcTransferTension(a,b,arr,leave,gatea,gateb):
     JZD = excTime/linktime
     return JZD
 
+#计算换乘时间的分布
+def distributeOfExcTime(excTimeList):
+    totalDic = {}
+    #iList = []
+    for i in range(5,95,5):
+        #iList.append(i)
+        subs = str(i)
+        dics = {subs:0}
+        totalDic.update(dics)
+        dics.clear()
+    for times in excTimeList:
+        for keys in totalDic:
+            if int(times)<= int(keys):
+                totalDic[keys] +=1
+    return sorted(totalDic.items(),key=lambda item:item[1])
+
+#计算紧张度的分布
+def distributeOfJZD(JZDlist):
+    totalDic = {}
+    #iList = []
+    for i in range(0,20):
+        subs = str(float(i)/10.)
+        dics = {subs:0}
+        totalDic.update(dics)
+        dics.clear()
+    for jzd in JZDlist:
+        for keys in totalDic:
+            if float(jzd)<= float(keys):
+                totalDic[keys] +=1
+    return sorted(totalDic.items(),key=lambda item:item[1])
+
+#画出换乘时间的分布图
+def drawPictime(dict):
+    import matplotlib.pyplot as plt
+    import matplotlib.mlab as mlab
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+    plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+    xlist = []
+    ylist = []
+    for keys in dict:
+        xlist.append(int(keys[0]))
+        ylist.append(int(keys[-1]))
+    maxNum = max(ylist)
+    for index,num in enumerate(ylist):
+        ylist[index]=float(float(num)/float(maxNum))
+    plt.bar(xlist, ylist,color='rgb', tick_label=xlist)
+    for a,b in zip(xlist,ylist):
+        plt.text(a, b + 0.05, '%.3f' % b, ha='center', va='bottom', fontsize=11)
+    plt.title('总体旅客换乘时间分布图')
+    plt.savefig('总体旅客换乘时间分布图.jpg')
+    plt.show()
+
+#画出紧张度的分布图
+def drawPicjzd(dict):
+    import matplotlib.pyplot as plt
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+    plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+    xlist = []
+    ylist = []
+    for keys in dict:
+        xlist.append(str(keys[0]))
+        ylist.append(float(keys[-1]))
+    maxNum = max(ylist)
+    for index,num in enumerate(ylist):
+        ylist[index]=float(float(num)/float(maxNum))
+    plt.bar(xlist, ylist,color='rgb')
+    for a,b in zip(xlist,ylist):
+        plt.text(a, b + 0.05, '%.3f' % b, ha='center', va='bottom', fontsize=11)
+    plt.title('总体旅客换乘紧张度分布图')
+    plt.savefig('总体旅客换乘紧张度分布图.jpg')
+    plt.show()
+
 # 计算最短流程时间
 def calc_min_flow(puck,gate):
 
