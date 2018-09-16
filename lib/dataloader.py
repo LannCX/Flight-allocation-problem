@@ -32,7 +32,6 @@ def read_data():
                 # 到达、出发时间
                 elif j==2 or j==7:
                     data_value = xlrd.xldate_as_tuple(sheet.cell_value(i, j), workbook.datemode)
-                    # TODO:补零后部分数据仍然不规范，如：0:5
                     val = str(data_value[-3]).zfill(2) + ':' + str(data_value[-2]).zfill(2)
                 else:
                     pass
@@ -76,9 +75,7 @@ def read_data():
 
     return Pucks, Tickets, Gates
 
-
-
-# 数据预处理
+# 登机口数据预处理
 def data_filter(pucks):
     remove_list = []
     # 遍历字典
@@ -91,12 +88,14 @@ def data_filter(pucks):
         # 航班离开时刻加45分钟(总的飞机停留时间段)
         time = [int(x) for x in value['出发时刻'].split(':')]
         if time[1]+45>=60:
-            time[0] += 1
             time[1] = time[1]+45-60
+            time[0] += 1
             if time[0]>24:
                 time[0]=24
                 time[1]=0
-        # TODO: 同上，检查补零的问题
+        else:
+            time[1] +=45
+
         value['出发时刻'] = str(time[0]).zfill(2) + str(time[1]).zfill(2)
         # 统一航班到达时刻时间格式
         time = [int(x) for x in value['到达时刻'].split(':')]
@@ -113,13 +112,14 @@ def data_filter(pucks):
     return pucks
 
 # 统计每个航班的人数（带星号航班不考虑）
-def calcu_pass(tickets):
+def calc_passenger(tickets):
     table = {}
     # 遍历字典
-
+    for key, value in tickets.items():
+        pass
     return table
 
 if __name__ == '__main__':
     P, T, G = read_data()
     Pucks = data_filter(P)
-    t = calcu_pass(T)
+    t = calc_passenger(T)
