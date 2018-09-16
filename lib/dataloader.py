@@ -3,7 +3,6 @@ import xlwt
 import numpy as np
 from datetime import date, datetime
 
-root_dir = '..'
 # 宽窄机型对照表
 aircraft = {'W':['332','333','33E','33H','33L','773'],
             'N':['319','320','321','323','325','738','73A','73E','73H','73L']}
@@ -13,9 +12,10 @@ flow = [[15,20,35,40],[20,15,40,35],[35,40,20,30],[40,45,30,20]]
 count = [[0,1,0,1],[1,0,1,0],[0,1,0,1],[1,2,1,0]]
 
 # 字典格式输出Pucks、Tickets、Gates三个表格
-def read_data():
+# 输入：文件所在目录（不包含文件名）
+def read_data(data_dir):
     # 打开文件
-    workbook = xlrd.open_workbook(os.path.join(root_dir,'InputData.xlsx'))
+    workbook = xlrd.open_workbook(os.path.join(data_dir,'InputData.xlsx'))
 
     # Get Pucks
     Pucks = {}
@@ -111,15 +111,6 @@ def data_filter(pucks):
 
     return pucks
 
-# 统计每个航班的人数（带星号航班不考虑）
-def calc_passenger(tickets):
-    table = {}
-    # 遍历字典
-    for key, value in tickets.items():
-        pass
-    return table
-
 if __name__ == '__main__':
-    P, T, G = read_data()
+    P, T, G = read_data('..')
     Pucks = data_filter(P)
-    t = calc_passenger(T)

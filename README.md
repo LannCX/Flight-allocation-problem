@@ -1,6 +1,6 @@
 > Code collection of topic F in 15th Chinese Graduates' Mathematical Contest in Modeling for the Graduate students of China, 2018.
 
-> 自行添加代码到对应文件夹。
+> 自行添加代码到对应文件夹。不要修改其他文件
 ## 1.代码结构
 - lib: 存放函数，包括数据读取，数学模型，常用函数等
 - solution: 实验和
