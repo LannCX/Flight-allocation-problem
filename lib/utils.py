@@ -164,18 +164,5 @@ def drawPicjzd(dict):
     plt.savefig('总体旅客换乘紧张度分布图.jpg')
     plt.show()
 
-# TODO: 计算目标函数(问题2,3)
-def calcObj(Gmap,prob_num=1):
-    score = 0
-    if prob_num == 1:
-        score = sum([len(val) for val in Gmap.values()])
-    elif prob_num == 2:
-        score = None
-    elif prob_num == 3:
-        score = None
-    else:
-        raise ('Invalid prob_num, it should in {1,2,3}')
-    return score
-
 if __name__ == '__main__':
     pass
