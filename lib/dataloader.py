@@ -111,6 +111,20 @@ def data_filter(pucks):
 
     return pucks
 
+# 机票数据预处理
+def tickets_filter(tickets):
+    remove_list = []
+    # 遍历字典
+    for key,value in tickets.items():
+        # 删除与20号没有交集的航班
+        if '2018-01-20' not in [value['到达日期'], value['出发日期']]:
+            remove_list.append(key)
+            continue
+    for k in remove_list:
+        tickets.pop(k)
+
+    return tickets
+
 if __name__ == '__main__':
     P, T, G = read_data('..')
     Pucks = data_filter(P)

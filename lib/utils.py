@@ -2,6 +2,7 @@ import pandas as pd
 from lib import dataloader
 
 # 统计每个航班的人数（带星号航班不考虑）
+# 输出table:{ 航班名：人数 }
 def calc_passenger(pucks, tickets):
     table = {}
     # 遍历字典
@@ -52,7 +53,7 @@ def passengerFlow(a,b):
     res = data[dict_temp[a]][b]
     route = int(res[:2])
     cnt = int(res[-1])
-    return route,cnt
+    return route, cnt
 
 #旅客行走时间，从登机口区域a走到b
 def walkTime(a,b):
