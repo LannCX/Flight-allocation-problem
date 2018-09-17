@@ -25,6 +25,19 @@ def calc_passenger(pucks, tickets):
 
     return table
 
+# 获取出入类型计算的系数
+def getIta(stra,strb):
+    '''
+    :param stra: 行索引，字符串
+    :param strb: 列索引，字符串
+    :return: η值，整型
+    '''
+    dicRow = {'II':0,'ID':1,'IDI':2,'DI':3,'DD':4,'DDI':5,'DII':6,'DII':7,'DID':8,'DIDI':9}
+    filePath = (r'InputData4.xlsx')
+    data = pd.read_excel(filePath, encoding='gbk')
+    res = data[stra][dicRow[strb]]
+    return int(res)
+
 # 旅客流程
 def passengerFlow(a,b):
     '''
@@ -55,30 +68,11 @@ def walkTime(a,b):
     time = int(res)
     return time
 
-#获取时间字符串的时分秒
-def getTime(str):
-    hrs = int(str[:2])
-    mins = int(str[-2:])
-    secs = 00
-    return hrs,mins,secs
-
 #计算时间a和时间b的时间间隔，以分表示
 def calcTime(stra,strb):
-    import datetime
-    ahrs,amins,asecs = getTime(stra)
-    bhrs,bmins,bsecs = getTime(strb)
-    a = str(ahrs)+':'+str(amins)+':'+str(asecs)
-    b = str(bhrs)+':'+str(bmins)+':'+str(bsecs)
-    timea = datetime.datetime.strptime(a,"%H:%M:%S")
-    timeb = datetime.datetime.strptime(b,"%H:%M:%S")
-    if timea < timeb:
-        link = (timeb - timea)
-    else:
-        link = (timea - timeb)
-    linkTime = list(str(link))
-    h = linkTime[0]+linkTime[1]
-    min = linkTime[3]+linkTime[4]
-    return int(h)*60+int(min)
+    t1 = int(stra[:2]) * 60 + int(stra[2:])
+    t2 = int(strb[:2]) * 60 + int(strb[2:])
+    return abs(t1 - t2)
 
 #计算换乘紧张度
 def calcTransferTension(a,b,arr,leave,gatea,gateb):
@@ -170,10 +164,18 @@ def drawPicjzd(dict):
     plt.savefig('总体旅客换乘紧张度分布图.jpg')
     plt.show()
 
-# 计算最短流程时间
-def calc_min_flow(puck,gate):
-
-    pass
+# TODO: 计算目标函数(问题2,3)
+def calcObj(Gmap,prob_num=1):
+    score = 0
+    if prob_num == 1:
+        score = sum([len(val) for val in Gmap.values()])
+    elif prob_num == 2:
+        score = None
+    elif prob_num == 3:
+        score = None
+    else:
+        raise ('Invalid prob_num, it should in {1,2,3}')
+    return score
 
 if __name__ == '__main__':
     pass
