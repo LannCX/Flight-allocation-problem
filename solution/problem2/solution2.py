@@ -100,7 +100,6 @@ def findroute(dG):
 
     return opt_rt
 
-# TODO：问题二匹配航班和登机口
 def matchG(dg, Gates, pucks):
     gates = Gates
     Gmap = {}
@@ -132,17 +131,22 @@ def matchG(dg, Gates, pucks):
     return Gmap
 
 # TODO: 问题二的目标函数
-def calcTotalFlow(map):
+def calcTotalFlow(map,tickets):
     totalflow = 0
     flow = 0
     P, T, G = read_data('../')
     Pucks = data_filter(P)
     table = calc_passenger(Pucks, T)
 
+    # 每张票找流程
+    for tkey, tval in tickets.items():
+        pass
+
     for mkey, mval in map:
         for pk in mval:
-            flow += passengerFlow(Pucks[pk]['到达类型'] + G[mkey]['终端厅'],Pucks[pk]['出发类型'] + G[mkey]['终端厅'])*\
-                   table[]
+            pass
+            # flow += passengerFlow(Pucks[pk]['到达类型'] + G[mkey]['终端厅'],Pucks[pk]['出发类型'] + G[mkey]['终端厅'])*\
+            #        table[]
 
     return totalflow
 
@@ -166,7 +170,7 @@ if __name__ == '__main__':
         Gmap = matchG(DG, G, P)
 
         # 计算目标函数值
-        score = calcTotalFlow(Gmap)
+        score = calcTotalFlow(Gmap,Tickets)
         if score < optscore:
             optscore = score
             opt_gmap = Gmap

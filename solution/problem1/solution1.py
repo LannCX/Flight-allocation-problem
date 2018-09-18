@@ -138,7 +138,7 @@ def calcObj(Gmap):
 
 if __name__ == '__main__':
     # 蒙特卡洛搜索
-    N = 1000
+    N = 3000
     optscore = 0
     opt_gmap = {}
     score_list = []
