@@ -141,9 +141,7 @@ if __name__ == '__main__':
     N = 3000
     optscore = 0
     opt_gmap = {}
-    score_list = []
     optscore_list = []
-    gates_list = []
     optgates_list = []
 
     for i in range(N):
@@ -152,31 +150,34 @@ if __name__ == '__main__':
         DG = createG(Pucks)
 
         # 求解最优匹配
-        Gmap = matchG(DG, G, P)
+        Gmap = matchG(DG, G, Pucks)
 
         # 计算目标函数值
         score = calcObj(Gmap)
+        # 安排最多航班
         if score > optscore:
             optscore = score
             opt_gmap = Gmap
             with open('result.txt','w') as f:
                 f.write(str(opt_gmap))
                 f.close()
+        # 登机口占用最少
+        elif score == optscore and len(Gmap)<len(opt_gmap):
+            optscore = score
+            opt_gmap = Gmap
+            with open('result.txt', 'w') as f:
+                f.write(str(opt_gmap))
+                f.close()
 
-        score_list.append(score)
-        gates_list.append(len(Gmap))
         optscore_list.append(optscore)
         optgates_list.append(len(opt_gmap))
 
         plt.scatter(i,optscore,c='b')
         print('Iteration %d: score:%d, gates:%d, optscore:%d, num of gates: %d'%(i+1,score,len(Gmap),optscore,len(opt_gmap)))
 
-    with open('score_list.txt','w') as f:
-        f.write(str(score_list))
+
     with open('optscore_list.txt','w') as f:
         f.write(str(optscore_list))
-    with open('gates_list.txt','w') as f:
-        f.write(str(gates_list))
     with open('optgates_list.txt','w') as f:
         f.write(str(optgates_list))
 

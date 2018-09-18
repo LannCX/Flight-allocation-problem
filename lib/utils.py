@@ -1,5 +1,7 @@
 import pandas as pd
 from lib import dataloader
+import xlrd,xlwt
+from xlutils.copy import copy
 
 # 统计每个航班的人数（带星号航班不考虑）
 # 输出table:{ 航班名：人数 }
@@ -40,32 +42,33 @@ def getIta(stra,strb):
     return int(res)
 
 # 旅客流程
-def passengerFlow(a,b):
+def passengerFlow(stra,strb):
     '''
     数字a为表格InputData2.xlsx的列索引，数字b为其行索引
     :param a:表格索引{0:'DT',1:'DS',2:'IT',3:'IS'}
     :param b:表格索引{0:'DT',1:'DS',2:'IT',3:'IS'}
     :return:route：最短流程时间，cnt：捷运乘坐次数
     '''
-    filePath = (r'InputData2.xlsx')
+    filePath = (r'../../InputData2.xlsx')
     data = pd.read_excel(filePath, encoding='gbk')
-    dict_temp = {0: 'DT', 1: 'DS', 2: 'IT', 3: 'IS'}
-    res = data[dict_temp[a]][b]
+    # dict_temp = {0: 'DT', 1: 'DS', 2: 'IT', 3: 'IS'}
+    dict_b = {'DT':0, 'DS':1, 'IT':2, 'IS':3}
+    res = data[strb][dict_b[stra]]
     route = int(res[:2])
     cnt = int(res[-1])
     return route, cnt
 
 #旅客行走时间，从登机口区域a走到b
-def walkTime(a,b):
+def walkTime(stra,strb):
     '''
     :param a:表格索引{0:'T-North',1:'T-Center',2:'T-South',3:'S-North',4:'S-Center',5:'S-South',6:'S-East'}
     :param b:表格索引{0:'T-North',1:'T-Center',2:'T-South',3:'S-North',4:'S-Center',5:'S-South',6:'S-East'}
     :return:从登机口区域a走到b的时间
     '''
-    filePath = (r'InputData3.xlsx')
+    filePath = (r'../../InputData3.xlsx')
     data = pd.read_excel(filePath, encoding='gbk')
-    dict_temp = {0:'T-North',1:'T-Center',2:'T-South',3:'S-North',4:'S-Center',5:'S-South',6:'S-East'}
-    res = data[dict_temp[a]][b]
+    dict_temp = {'T-North':0,'T-Center':1,'T-South':2,'S-North':3,'S-Center':4,'S-South':5,'S-East':6}
+    res = data[strb][dict_temp[stra]]
     time = int(res)
     return time
 
@@ -86,12 +89,12 @@ def calcTransferTension(a,b,arr,leave,gatea,gateb):
     :param gate: 登机口b，{0:'T-North',1:'T-Center',2:'T-South',3:'S-North',4:'S-Center',5:'S-South',6:'S-East'}
     :return: 换乘紧张度
     '''
-    linktime = calcTime(a,b)
-    route,count =passengerFlow(arr,leave)
+    linktime = calcTime(a,b) - 45
+    route, cnt  =passengerFlow(arr,leave)
     waltime = walkTime(gatea,gateb)
-    excTime = route+count*8+waltime
+    excTime = route+cnt*8+waltime
     JZD = excTime/linktime
-    return JZD
+    return JZD,linktime
 
 #计算换乘时间的分布
 def distributeOfExcTime(excTimeList):
@@ -165,5 +168,42 @@ def drawPicjzd(dict):
     plt.savefig('总体旅客换乘紧张度分布图.jpg')
     plt.show()
 
+def read_dict(file_dir):
+    # 读取结果
+    with open(file_dir, 'r') as f:
+        a = f.read()
+        dic_name = eval(a)
+        f.close()
+    return dic_name
+
+# 保存最终结果到excel文件中
+def saveresults():
+    res1 = read_dict('../solution/problem1/result.txt')
+    res2 = read_dict('../solution/problem2/result.txt')
+    res3 = read_dict('../solution/problem3/result.txt')
+
+    old_excel = xlrd.open_workbook('../InputData.xlsx')
+    new_excel = copy(old_excel)
+    ws = new_excel.get_sheet(0) # Pucks
+
+    # for i in range(1,753):
+    #     for j in range(12,14):
+    #         ws.write()
+
+    for rkey, rval in res1.items():
+        for r in rval:
+            ws.write(int(r.replace('PK','')),12,rkey)
+
+    for rkey, rval in res2.items():
+        for r in rval:
+            ws.write(int(r.replace('PK','')),13,rkey)
+
+    for rkey, rval in res3.items():
+        for r in rval:
+            ws.write(int(r.replace('PK','')),14,rkey)
+
+    new_excel.save('../result.xls')
+
 if __name__ == '__main__':
-    pass
+    # 保存三个问题的分配结果
+    saveresults()
