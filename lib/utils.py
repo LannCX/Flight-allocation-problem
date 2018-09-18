@@ -96,11 +96,10 @@ def calcTransferTension(a,b,arr,leave,gatea,gateb):
     JZD = excTime/linktime
     return JZD,linktime
 
-#计算换乘时间的分布
 def distributeOfExcTime(excTimeList):
     totalDic = {}
-    #iList = []
-    for i in range(5,95,5):
+    m = int((max(excTimeList)/10))*10+5
+    for i in range(5,m,5):
         #iList.append(i)
         subs = str(i)
         dics = {subs:0}
@@ -112,11 +111,10 @@ def distributeOfExcTime(excTimeList):
                 totalDic[keys] +=1
     return sorted(totalDic.items(),key=lambda item:item[1])
 
-#计算紧张度的分布
 def distributeOfJZD(JZDlist):
+    m = int(max(JZDlist)*10)
     totalDic = {}
-    #iList = []
-    for i in range(0,20):
+    for i in range(1,m):
         subs = str(float(i)/10.)
         dics = {subs:0}
         totalDic.update(dics)
@@ -127,10 +125,9 @@ def distributeOfJZD(JZDlist):
                 totalDic[keys] +=1
     return sorted(totalDic.items(),key=lambda item:item[1])
 
-#画出换乘时间的分布图
-def drawPictime(dict):
+def drawPictime(list):
+    dict = distributeOfExcTime(list)
     import matplotlib.pyplot as plt
-    import matplotlib.mlab as mlab
     plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
     plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     xlist = []
@@ -141,15 +138,18 @@ def drawPictime(dict):
     maxNum = max(ylist)
     for index,num in enumerate(ylist):
         ylist[index]=float(float(num)/float(maxNum))
+    plt.plot(xlist, ylist)
     plt.bar(xlist, ylist,color='rgb', tick_label=xlist)
-    for a,b in zip(xlist,ylist):
-        plt.text(a, b + 0.05, '%.3f' % b, ha='center', va='bottom', fontsize=11)
-    plt.title('总体旅客换乘时间分布图')
-    plt.savefig('总体旅客换乘时间分布图.jpg')
+    plt.xticks(xlist[::20], xlist[::20], rotation=90)
+    plt.xlabel(u'换乘时间')
+    plt.ylabel(u'比率')
+    plt.title(u'总体旅客换乘时间分布图')
+    plt.savefig(u'总体旅客换乘时间分布图.jpg')
     plt.show()
 
-#画出紧张度的分布图
-def drawPicjzd(dict):
+def drawPicjzd(list):
+    colors = ['red', 'blue', 'green', 'orange', 'black']
+    dict = distributeOfJZD(list)
     import matplotlib.pyplot as plt
     plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
     plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
@@ -161,11 +161,17 @@ def drawPicjzd(dict):
     maxNum = max(ylist)
     for index,num in enumerate(ylist):
         ylist[index]=float(float(num)/float(maxNum))
-    plt.bar(xlist, ylist,color='rgb')
-    for a,b in zip(xlist,ylist):
-        plt.text(a, b + 0.05, '%.3f' % b, ha='center', va='bottom', fontsize=11)
-    plt.title('总体旅客换乘紧张度分布图')
-    plt.savefig('总体旅客换乘紧张度分布图.jpg')
+        if int(num) == 1:
+            break
+    xlist = xlist[:50]
+    ylist = ylist[:50]
+    plt.plot(xlist, ylist,c='black')
+    plt.bar(xlist, ylist,color='rgb', tick_label=xlist)
+    plt.xticks(xlist[::10], xlist[::10], rotation=30)
+    plt.xlabel(u'紧张度')
+    plt.ylabel(u'比率')
+    plt.title(u'总体旅客换乘紧张度分布图')
+    plt.savefig(u'总体旅客换乘紧张度分布图.jpg')
     plt.show()
 
 def read_dict(file_dir):
