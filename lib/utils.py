@@ -140,8 +140,10 @@ def drawPictime(list):
         ylist[index]=float(float(num)/float(maxNum))
     plt.plot(xlist, ylist)
     plt.bar(xlist, ylist,color='rgb', tick_label=xlist)
-    plt.xticks(xlist[::20], xlist[::20], rotation=90)
-    plt.xlabel(u'换乘时间')
+    # for a, b in zip(xlist, ylist):
+    #     plt.text(a, b + 0.05, '%.2f' % b, ha='center', va='bottom', fontsize=11)
+    plt.xticks(xlist[::50], xlist[::50], rotation=0)
+    plt.xlabel(u'换乘时间（分钟）')
     plt.ylabel(u'比率')
     plt.title(u'总体旅客换乘时间分布图')
     plt.savefig(u'总体旅客换乘时间分布图.jpg')
