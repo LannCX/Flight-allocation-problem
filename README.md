@@ -1,4 +1,4 @@
-> Code collection of topic F in 15th Chinese Graduates' Mathematical Contest in Modeling for the Graduate students of China, 2018.
+> Code collection for problem F of 15th National Post-Graduate Mathematical Contest in Modeling，2018.
 
 > 自行添加代码到对应文件夹。不要修改其他文件
 ## 1.代码结构
