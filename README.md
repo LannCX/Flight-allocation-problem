@@ -1,9 +1,9 @@
-> Code collection of topic F in 15th Chinese Graduates' Mathematical Contest in Modeling for the Graduate students of China, 2018.
+> Code collection for problem F of 15th National Post-Graduate Mathematical Contest in Modeling，2018.
 
 > Assessment of the impact of the new airport satellite hall on transit passengers
 ## 1.代码结构
 - lib: 存放函数，包括数据读取，数学模型，常用函数等
-- solution: 实验和
+- solution: 实验和结果存放
     - problem1:图表、数据文件，问题一相关代码
     - problem2:图表、数据文件，问题二相关代码
     - problem3:图表、数据文件，问题三相关代码
